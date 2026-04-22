@@ -1,0 +1,419 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+/** Animated teal border on interactive cards (hover only) */
+@property --card-border-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes card-border-rotate {
+  to {
+    --card-border-angle: 360deg;
+  }
+}
+
+:root {
+  /* Default Dark Theme Variables */
+  --background: #0A0B0D;
+  --surface: #121417;
+  --surface-container-lowest: #050607;
+  --surface-container-low: #181B1F;
+  --surface-container: #1E2227;
+  --surface-container-high: #252A30;
+  --surface-container-highest: #2D333B;
+  
+  --primary: #66D9CC;
+  --on-primary: #003732;
+  --secondary: #FFB392;
+  --on-secondary: #4A2110;
+  --tertiary: #D4BFFF;
+  
+  --outline: #3E444D;
+  --outline-variant: #2D333B;
+  
+  --on-surface: #E1E3E6;
+  --on-surface-variant: #9DA3AE;
+  
+  --error: #FF8A8A;
+  --success: #8AFFB3;
+  --warning: #FFD68A;
+
+  --grid-dots: rgba(255, 255, 255, 0.03);
+}
+
+.light {
+  /* Light theme — warm page chrome; cards use pure white */
+  --background: #FAF5F5;
+  --surface: #FFFFFF;
+  --surface-container-lowest: #FFFFFF;
+  --surface-container-low: #FFFFFF;
+  /* Nested inputs / chips; card faces use surface + *-low* above */
+  --surface-container: #FFFFFF;
+  --surface-container-high: #EDEAEA;
+  --surface-container-highest: #9A9191;
+  
+  --primary: #0D9488;
+  --on-primary: #FFFFFF;
+  --secondary: #EA580C;
+  --on-secondary: #FFFFFF;
+  --tertiary: #7C3AED;
+  
+  --outline: #A89E9E;
+  --outline-variant: #D4CCCC;
+  
+  --on-surface: #0F172A;
+  --on-surface-variant: #334155; /* Darker for better readability */
+  
+  --error: #DC2626;
+  --success: #16A34A;
+  --warning: #D97706;
+
+  --grid-dots: rgba(0, 0, 0, 0.05);
+}
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-headline: "Inter", sans-serif;
+  --font-serif: "Inter", sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+  
+  --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
+  --color-secondary: var(--secondary);
+  --color-on-secondary: var(--on-secondary);
+  --color-tertiary: var(--tertiary);
+  
+  --color-outline: var(--outline);
+  --color-outline-variant: var(--outline-variant);
+  
+  --color-on-surface: var(--on-surface);
+  --color-on-surface-variant: var(--on-surface-variant);
+  
+  --color-error: var(--error);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+}
+
+@layer base {
+  body {
+    @apply bg-background text-on-surface font-sans antialiased min-h-screen;
+    background-attachment: fixed;
+  }
+
+  .light body {
+    background-image: 
+      /* Red dots along a diagonal */
+      radial-gradient(circle at 2px 2px, rgba(220, 38, 38, 0.08) 1.5px, transparent 0),
+      /* The Grid */
+      linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+      /* Diagonal lines */
+      linear-gradient(105deg, transparent 45%, rgba(0, 0, 0, 0.01) 45.1%, rgba(0, 0, 0, 0.01) 45.2%, transparent 45.3%),
+      linear-gradient(105deg, transparent 55%, rgba(0, 0, 0, 0.01) 55.1%, rgba(0, 0, 0, 0.01) 55.2%, transparent 55.3%);
+    background-size: 120px 400px, 40px 40px, 40px 40px, 100% 100%, 100% 100%;
+  }
+
+  :not(.light) body {
+    background-image: 
+      radial-gradient(circle at 2px 2px, var(--grid-dots) 1px, transparent 0);
+    background-size: 40px 40px;
+  }
+
+  /* Custom Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-outline-variant/50 rounded-full hover:bg-primary/30 transition-colors;
+  }
+}
+
+@layer components {
+  /**
+   * Cards (light): soft border + subtle shadow — standard enterprise surface.
+   * Primary variant: slightly more elevation for hero / highlight panels.
+   */
+  .light .card-elevated {
+    @apply rounded-xl border border-solid cursor-default;
+    background-color: #ffffff !important;
+    border-color: #e5e7eb !important;
+    border-width: 1px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    background-image: none;
+  }
+
+  .light .card-elevated-primary {
+    @apply rounded-xl border border-solid cursor-default;
+    background-color: #ffffff !important;
+    border-color: #e5e7eb !important;
+    border-width: 1px;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.04),
+      0 4px 14px rgba(0, 0, 0, 0.06);
+    background-image: none;
+  }
+
+  .light .card-elevated--interactive {
+    @apply rounded-xl border border-solid cursor-pointer;
+    background-color: #ffffff !important;
+    border-color: #e5e7eb !important;
+    border-width: 1px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    background-image: none;
+    transition: border-color 0.15s ease, background-image 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .light .card-elevated--interactive:hover {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    background-image:
+      linear-gradient(#ffffff, #ffffff),
+      conic-gradient(
+        from var(--card-border-angle),
+        var(--primary),
+        color-mix(in srgb, var(--primary) 45%, transparent) 0.12turn,
+        transparent 0.32turn,
+        transparent 0.68turn,
+        color-mix(in srgb, var(--primary) 45%, transparent) 0.88turn,
+        var(--primary)
+      );
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: transparent;
+    animation: card-border-rotate 2.8s linear infinite;
+  }
+
+  /** Segment / filter toggles: default white + black text; active = teal + white */
+  .light .toggle-chip {
+    @apply rounded-sm border border-solid font-bold leading-none transition-colors;
+    background-color: #ffffff !important;
+    color: var(--on-surface) !important;
+    border-color: #e5e7eb !important;
+    border-width: 1px;
+  }
+
+  .light .toggle-chip:hover:not(:disabled) {
+    @apply bg-primary text-on-primary;
+    border-color: var(--primary) !important;
+  }
+
+  .light .toggle-chip--active {
+    background-color: var(--primary) !important;
+    color: var(--on-primary) !important;
+    border-color: var(--primary) !important;
+  }
+
+  .light .toggle-chip--active:hover:not(:disabled) {
+    @apply opacity-95;
+  }
+
+  :not(.light) .toggle-chip {
+    @apply rounded-sm border border-solid font-bold leading-none transition-colors;
+    background-color: var(--surface-container-low);
+    color: var(--on-surface);
+    border-color: rgb(255 255 255 / 0.12);
+    border-width: 0.5px;
+  }
+
+  :not(.light) .toggle-chip--active {
+    background-color: var(--primary);
+    color: var(--on-primary);
+    border-color: var(--primary);
+  }
+
+  :not(.light) .toggle-chip:hover:not(:disabled) {
+    background-color: var(--primary);
+    color: var(--on-primary);
+    border-color: var(--primary);
+  }
+
+  :not(.light) .toggle-chip--active:hover:not(:disabled) {
+    opacity: 0.95;
+  }
+
+  :not(.light) .card-elevated-primary {
+    @apply rounded-xl border border-solid;
+    background-color: var(--surface-container-low);
+    border-color: rgb(255 255 255 / 0.12);
+    border-width: 0.5px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+    background-image: none;
+  }
+
+  :not(.light) .card-elevated,
+  :not(.light) .card-elevated--interactive {
+    @apply rounded-xl border border-solid;
+    background-color: var(--surface-container-low);
+    border-color: rgb(255 255 255 / 0.12);
+    border-width: 0.5px;
+    box-shadow: none;
+    background-image: none;
+  }
+
+  :not(.light) .card-elevated--interactive {
+    @apply cursor-pointer;
+    transition: border-color 0.15s ease;
+  }
+
+  :not(.light) .card-elevated--interactive:hover {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    background-image:
+      linear-gradient(var(--surface-container-low), var(--surface-container-low)),
+      conic-gradient(
+        from var(--card-border-angle),
+        var(--primary),
+        color-mix(in srgb, var(--primary) 45%, transparent) 0.12turn,
+        transparent 0.32turn,
+        transparent 0.68turn,
+        color-mix(in srgb, var(--primary) 45%, transparent) 0.88turn,
+        var(--primary)
+      );
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    border-width: 0.5px;
+    border-style: solid;
+    border-color: transparent;
+    animation: card-border-rotate 2.8s linear infinite;
+  }
+
+  .glass-panel {
+    @apply bg-surface/60 backdrop-blur-md border border-outline-variant/30;
+  }
+
+  .light .glass-panel {
+    @apply bg-white backdrop-blur-none;
+  }
+  
+  .tech-card {
+    @apply bg-surface border border-outline-variant/30 relative overflow-hidden;
+  }
+  
+  .tech-card::before {
+    content: '';
+    @apply absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/20 to-transparent;
+  }
+
+  .mono-label {
+    @apply font-sans text-[10px] uppercase tracking-[0.2em] opacity-50;
+  }
+
+  .serif-title {
+    @apply font-sans font-bold text-2xl tracking-tight;
+  }
+
+  .page-shell {
+    @apply p-8 min-h-full bg-background;
+  }
+
+  .page-kicker {
+    @apply text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/70 mb-2;
+  }
+
+  .page-title {
+    @apply text-3xl font-bold font-headline tracking-tight text-on-surface;
+  }
+
+  .page-description {
+    @apply text-sm text-on-surface-variant mt-1 max-w-2xl;
+  }
+
+  .section-label {
+    @apply text-[10px] font-bold uppercase tracking-widest text-on-surface-variant;
+  }
+
+  /**
+   * Standard buttons: same height everywhere; width grows with label (whitespace-nowrap).
+   * Use: className="btn btn-primary" (+ optional gap/icon as children).
+   */
+  .btn {
+    @apply inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-sm font-bold uppercase tracking-widest leading-none transition-colors;
+    @apply min-h-8 px-3 text-[10px];
+  }
+
+  .btn:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-on-primary hover:opacity-90;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-on-secondary hover:opacity-90;
+  }
+
+  .btn-outline {
+    @apply border border-outline-variant/20 bg-transparent text-on-surface hover:bg-surface-container-high;
+  }
+
+  .btn-surface {
+    @apply border border-outline-variant/10 bg-surface-container-low text-primary hover:bg-surface-container-high;
+  }
+
+  .btn-muted {
+    @apply bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface;
+  }
+
+  .btn-danger {
+    @apply text-error hover:bg-error/10;
+  }
+
+  .btn-warning {
+    @apply bg-amber-500 text-white hover:opacity-90;
+  }
+
+  /** Full-width primary/secondary actions in cards */
+  .btn-block {
+    @apply w-full;
+  }
+
+  /** Square icon-only control (same 32px height as .btn) */
+  .btn-icon {
+    @apply inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-sm text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface;
+  }
+
+  /** Compact icon in headers (matches btn height) */
+  .btn-icon-sm {
+    @apply inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-sm p-0 text-on-surface-variant transition-colors hover:bg-surface-container-high;
+  }
+
+  /**
+   * Light theme: CTAs that are not already primary (teal) get teal fill + white text on hover.
+   * .btn-primary keeps its own hover (opacity).
+   */
+  .light .btn-outline:hover:not(:disabled),
+  .light .btn-secondary:hover:not(:disabled),
+  .light .btn-surface:hover:not(:disabled),
+  .light .btn-muted:hover:not(:disabled),
+  .light .btn-ghost:hover:not(:disabled),
+  .light .btn-danger:hover:not(:disabled),
+  .light .btn-warning:hover:not(:disabled) {
+    @apply bg-primary text-on-primary border-primary;
+  }
+
+  .light .btn-icon:hover:not(:disabled),
+  .light .btn-icon-sm:hover:not(:disabled) {
+    @apply bg-primary text-on-primary;
+  }
+}

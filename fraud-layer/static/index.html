@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fraud Lab | Live Detection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="bg-orb orb-a"></div>
+    <div class="bg-orb orb-b"></div>
+    <div class="bg-orb orb-c"></div>
+    <div class="bg-grid"></div>
+    <div class="bg-scan"></div>
+    <div class="noise"></div>
+
+    <main class="shell">
+      <header class="top nav-top reveal">
+        <div class="title-wrap">
+          <p class="eyebrow">Standalone Risk Intelligence Layer</p>
+          <h1>Fraud Detection Lab</h1>
+          <p class="subtitle">
+            Real-time insurance and banking fraud orchestration with full traceability, explainable verdicting, and
+            investor-grade visuals.
+          </p>
+          <div class="hero-pills">
+            <span class="hero-pill">Entity Profiling</span>
+            <span class="hero-pill">Graph Linkage</span>
+            <span class="hero-pill">Deviation ML</span>
+            <span class="hero-pill">Rules + Verdict</span>
+            <span class="hero-pill">Explainability</span>
+          </div>
+        </div>
+        <nav class="top-nav">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/lab" class="nav-link active">Lab</a>
+          <a href="/layers" class="nav-link">Layer Explorer</a>
+          <a href="/admin" class="nav-link">Admin Models</a>
+        </nav>
+      </header>
+
+      <section class="card hero-strip reveal">
+        <div class="hero-metric tilt-card">
+          <span class="hero-k">Active Cases</span>
+          <strong id="heroActiveCases">42</strong>
+          <small>Across insurance + banking</small>
+        </div>
+        <div class="hero-metric tilt-card">
+          <span class="hero-k">Avg. Detection Latency</span>
+          <strong>&lt; 2s</strong>
+          <small>Per case in demo stack</small>
+        </div>
+        <div class="hero-metric tilt-card">
+          <span class="hero-k">Explainability Coverage</span>
+          <strong>100%</strong>
+          <small>Layer-level traces retained</small>
+        </div>
+        <div class="hero-metric tilt-card">
+          <span class="hero-k">Live Status</span>
+          <strong class="good">Operational</strong>
+          <small>Streaming decisions</small>
+        </div>
+      </section>
+
+      <section class="controls card reveal">
+        <select id="sector">
+          <option value="insurance">Insurance</option>
+          <option value="banking">Banking</option>
+        </select>
+        <button id="refreshCases">Refresh Cases</button>
+        <button id="runSweep">Run Sector Sweep</button>
+        <button id="detectSelected">Detect Selected</button>
+      </section>
+
+      <section class="card pipeline-card reveal">
+        <div class="pipeline-head">
+          <h2>Live Detection Flow</h2>
+          <span id="pipelineLabel" class="pipeline-label">Ready</span>
+        </div>
+        <div class="progress-track">
+          <div id="pipelineProgress" class="progress-bar"></div>
+        </div>
+        <div id="pipelineSteps" class="pipeline-steps"></div>
+      </section>
+
+      <section class="grid reveal">
+        <article class="card tilt-card">
+          <h2>Rule Taxonomy</h2>
+          <div id="rules"></div>
+        </article>
+        <article class="card tilt-card">
+          <h2>Live Cases</h2>
+          <div id="cases"></div>
+        </article>
+        <article class="card tilt-card">
+          <h2>Detection Output</h2>
+          <div id="result" class="result-panel">Select a case and run detection.</div>
+        </article>
+      </section>
+
+      <section class="analytics-grid reveal">
+        <article class="card tilt-card">
+          <h2>Risk Cockpit</h2>
+          <div class="kpi-grid">
+            <div class="kpi">
+              <span class="label">Risk Score</span>
+              <strong id="kpiRisk">--</strong>
+            </div>
+            <div class="kpi">
+              <span class="label">Rule Hits</span>
+              <strong id="kpiRules">--</strong>
+            </div>
+            <div class="kpi">
+              <span class="label">Graph Links</span>
+              <strong id="kpiLinks">--</strong>
+            </div>
+            <div class="kpi">
+              <span class="label">Verdict</span>
+              <strong id="kpiVerdict">--</strong>
+            </div>
+          </div>
+        </article>
+
+        <article class="card tilt-card">
+          <h2>Score Trend</h2>
+          <canvas id="trendCanvas" width="760" height="240"></canvas>
+        </article>
+      </section>
+
+      <section class="card reveal">
+        <h2>Upload Evidence (PDF/TXT)</h2>
+        <form id="uploadForm">
+          <input type="text" id="title" placeholder="Title (e.g. 34-page oncology claim)" />
+          <input type="file" id="file" accept=".pdf,.txt" required />
+          <button type="submit">Upload Evidence</button>
+        </form>
+        <p class="hint">Upload a file, then run detection to show instant risk verdict and layer trace.</p>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+    <script src="/static/ui.js"></script>
+  </body>
+</html>

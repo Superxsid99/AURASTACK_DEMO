@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fraud Layer | Admin Models</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="bg-orb orb-a"></div>
+    <div class="bg-orb orb-b"></div>
+    <div class="bg-orb orb-c"></div>
+    <div class="bg-grid"></div>
+    <div class="bg-scan"></div>
+    <div class="noise"></div>
+
+    <main class="shell">
+      <header class="top nav-top reveal">
+        <div class="title-wrap">
+          <p class="eyebrow">Governance + Model Ops</p>
+          <h1>Admin Model Orchestration</h1>
+          <p class="subtitle">Choose model per fraud stage and apply instantly across all new detections.</p>
+        </div>
+        <nav class="top-nav">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/lab" class="nav-link">Lab</a>
+          <a href="/layers" class="nav-link">Layer Explorer</a>
+          <a href="/admin" class="nav-link active">Admin Models</a>
+        </nav>
+      </header>
+
+      <section class="card reveal">
+        <h2>Stage Model Assignment</h2>
+        <p class="hint">These values are persisted and consumed by the live detection pipeline.</p>
+        <div id="modelTable" class="model-grid"></div>
+        <div class="model-actions">
+          <button id="saveConfig">Save Model Config</button>
+          <span id="saveStatus" class="hint"></span>
+        </div>
+      </section>
+
+      <section class="grid reveal">
+        <article class="card tilt-card">
+          <h2>Architecture Mapping</h2>
+          <div class="timeline">
+            <div class="timeline-step"><span class="dot"></span><div><strong>Intake</strong><p>OCR + parse + normalize to canonical fraud schema.</p></div></div>
+            <div class="timeline-step"><span class="dot"></span><div><strong>Entity</strong><p>Behavior profile scoring, velocity checks, risk enrichment.</p></div></div>
+            <div class="timeline-step"><span class="dot"></span><div><strong>Graph</strong><p>Ring detection via shared identifiers and relationship graph.</p></div></div>
+            <div class="timeline-step"><span class="dot"></span><div><strong>Deviation ML</strong><p>Anomaly probability and drift deviation scoring.</p></div></div>
+            <div class="timeline-step"><span class="dot"></span><div><strong>Rules + Verdict</strong><p>Deterministic controls with explainable final decision.</p></div></div>
+          </div>
+        </article>
+
+        <article class="card tilt-card">
+          <h2>Demo Guidance</h2>
+          <ul class="clean-list">
+            <li>Switch one stage model (for example `deviation_ml`).</li>
+            <li>Go to Fraud Lab and detect the same case again.</li>
+            <li>Open Layer Explorer to show changed model in trace.</li>
+            <li>Highlight governance + explainability as enterprise strengths.</li>
+          </ul>
+        </article>
+      </section>
+    </main>
+
+    <script src="/static/admin.js"></script>
+    <script src="/static/ui.js"></script>
+  </body>
+</html>

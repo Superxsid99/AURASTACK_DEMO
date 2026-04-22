@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fraud Layer | Layer Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="bg-orb orb-a"></div>
+    <div class="bg-orb orb-b"></div>
+    <div class="bg-orb orb-c"></div>
+    <div class="bg-grid"></div>
+    <div class="bg-scan"></div>
+    <div class="noise"></div>
+
+    <main class="shell">
+      <header class="top nav-top reveal">
+        <div class="title-wrap">
+          <p class="eyebrow">Explainability View</p>
+          <h1>Layer Explorer</h1>
+          <p class="subtitle">Case-by-case stage evidence with model used, signal inputs, and structured outputs.</p>
+        </div>
+        <nav class="top-nav">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/lab" class="nav-link">Lab</a>
+          <a href="/layers" class="nav-link active">Layer Explorer</a>
+          <a href="/admin" class="nav-link">Admin Models</a>
+        </nav>
+      </header>
+
+      <section class="controls card reveal">
+        <select id="sector">
+          <option value="insurance">Insurance</option>
+          <option value="banking">Banking</option>
+        </select>
+        <button id="refreshCases">Refresh Cases</button>
+        <button id="generateDetection">Generate Latest Detection</button>
+      </section>
+
+      <section class="grid layers-grid reveal">
+        <article class="card tilt-card">
+          <h2>Cases</h2>
+          <div id="cases"></div>
+        </article>
+        <article class="card tilt-card">
+          <h2>Layer Timeline</h2>
+          <div id="layerTimeline"></div>
+        </article>
+      </section>
+
+      <section class="card reveal">
+        <h2>Selected Layer Detail</h2>
+        <div id="layerDetail" class="result-panel">Select a case and layer node to inspect inputs and outputs.</div>
+      </section>
+    </main>
+
+    <script src="/static/layers.js"></script>
+    <script src="/static/ui.js"></script>
+  </body>
+</html>

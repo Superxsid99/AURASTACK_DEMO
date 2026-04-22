@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fraud Layer | Command Center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="bg-orb orb-a"></div>
+    <div class="bg-orb orb-b"></div>
+    <div class="bg-orb orb-c"></div>
+    <div class="bg-grid"></div>
+    <div class="bg-scan"></div>
+    <div class="noise"></div>
+
+    <main class="shell">
+      <header class="top nav-top reveal">
+        <div class="title-wrap">
+          <p class="eyebrow">Fraud Intelligence Platform</p>
+          <h1>Fraud Detection Layer</h1>
+          <p class="subtitle">
+            Plug-and-play fraud layer for Insurance + Banking with model governance, explainability, and live
+            decisioning.
+          </p>
+        </div>
+        <nav class="top-nav">
+          <a href="/" class="nav-link active">Home</a>
+          <a href="/lab" class="nav-link">Lab</a>
+          <a href="/layers" class="nav-link">Layer Explorer</a>
+          <a href="/admin" class="nav-link">Admin Models</a>
+        </nav>
+      </header>
+
+      <section class="card hero-grid reveal">
+        <article class="hero-stat tilt-card">
+          <span class="label">Pipeline Layers</span>
+          <strong>6</strong>
+          <p>Intake -> Profiling -> Graph -> ML -> Rules -> Explanation</p>
+        </article>
+        <article class="hero-stat tilt-card">
+          <span class="label">Detection Rules</span>
+          <strong id="homeRules">--</strong>
+          <p>Insurance + Banking taxonomy with weighted scoring.</p>
+        </article>
+        <article class="hero-stat tilt-card">
+          <span class="label">Live Cases</span>
+          <strong id="homeCases">--</strong>
+          <p>Uploaded and seeded demo cases available for instant detection.</p>
+        </article>
+        <article class="hero-stat tilt-card">
+          <span class="label">Sweep Latency</span>
+          <strong>&lt;2s</strong>
+          <p>Single-case verdict in milliseconds for live demos.</p>
+        </article>
+      </section>
+
+      <section class="grid grid-home reveal">
+        <article class="card feature-card tilt-card">
+          <h2>1. Live Fraud Lab</h2>
+          <p>Upload evidence, run scoring, and show final verdict with full triggered-rule breakdown.</p>
+          <ul>
+            <li>PDF/TXT evidence ingestion</li>
+            <li>Single case and sector sweep detection</li>
+            <li>Animated pipeline progression</li>
+          </ul>
+          <a href="/lab" class="cta-link">Open Fraud Lab</a>
+        </article>
+
+        <article class="card feature-card tilt-card">
+          <h2>2. Layer Explorer</h2>
+          <p>Show exactly what happened at each stage: model used, signals ingested, scores produced.</p>
+          <ul>
+            <li>Per-layer stage cards</li>
+            <li>Evidence-style explainability</li>
+            <li>Case-wise timeline and rationale</li>
+          </ul>
+          <a href="/layers" class="cta-link">Open Layer Explorer</a>
+        </article>
+
+        <article class="card feature-card tilt-card">
+          <h2>3. Admin Model Control</h2>
+          <p>Choose model per stage without redeploying code. Great for controlled A/B demonstrations.</p>
+          <ul>
+            <li>Stage-wise model configuration</li>
+            <li>Instant save to persistent config</li>
+            <li>Applied in all new detections</li>
+          </ul>
+          <a href="/admin" class="cta-link">Open Admin Models</a>
+        </article>
+      </section>
+
+      <section class="card reveal">
+        <h2>How It Works</h2>
+        <div class="timeline">
+          <div class="timeline-step">
+            <span class="dot"></span>
+            <div>
+              <strong>Ingest</strong>
+              <p>Document and metadata are normalized into a canonical fraud schema.</p>
+            </div>
+          </div>
+          <div class="timeline-step">
+            <span class="dot"></span>
+            <div>
+              <strong>Score</strong>
+              <p>Entity, graph, anomaly, and rules engines each contribute to weighted score.</p>
+            </div>
+          </div>
+          <div class="timeline-step">
+            <span class="dot"></span>
+            <div>
+              <strong>Explain</strong>
+              <p>Human-readable rationale and stage-level trace are generated for investigations and audits.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/static/home.js"></script>
+    <script src="/static/ui.js"></script>
+  </body>
+</html>
