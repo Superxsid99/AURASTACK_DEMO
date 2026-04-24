@@ -1,0 +1,329 @@
+
+
+--- PAGE 1 ---
+Workflows  
+ 
+ 
+ 
+ 
+Aurastack  Workflows  –  Purpose-Driven  
+System
+ 
+Description
+  
+
+
+--- PAGE 2 ---
+1.  Healthcare  Claims  Management  (claims_mgmt_v1)  
+Why  This  Exists  
+Claims  are  where  insurance  companies  lose  or  make  money.  This  workflow  exists  to  automate  
+high-volume
+ 
+claims
+ 
+while
+ 
+protecting
+ 
+against
+ 
+fraud
+ 
+and
+ 
+leakage
+.
+ 
+Why  It  Is  Important  
+Without  this:  
+●  Fraud  slips  through  unnoticed  ●  Claims  processing  slows  down  ●  Operational  costs  explode  due  to  manual  reviews  
+This  workflow  ensures  speed  (STP)  +  control  (fraud  detection)  simultaneously.  
+Workflow  Logic  
+This  is  our  most  complex  "Straight-Through  Processing"  (STP)  engine.  It  begins  with  FNOL  
+(First
+ 
+Notice
+ 
+of
+ 
+Loss).
+ 
+Core  Components  
+●  Medical  Data  Extractor  (doc_ext_01)  
+Extracts
+ 
+CPT
+ 
+codes
+ 
+with
+ 
+semantic
+ 
+understanding
+ ●  Healthcare  Fraud  Sentinel  (fraud_det_01)  
+Detects
+ 
+impossible
+ 
+or
+ 
+suspicious
+ 
+medical
+ 
+patterns
+ 
+Decision  Logic  
+Flags  cases  like  repeated  surgeries  as  "Impossible/Fraudulent"  
+Human-in-the-loop  
+If  fraud_score  >  15,  case  is  paused  and  manually  verified  
+ 
+2.  Healthcare  Policy  Issuance  (policy_issuance_v1)  
+Why  This  Exists  
+
+--- PAGE 3 ---
+Customer  acquisition  speed  directly  impacts  revenue.  This  workflow  exists  to  compress  
+underwriting
+ 
++
+ 
+issuance
+ 
+into
+ 
+minutes
+ 
+instead
+ 
+of
+ 
+days
+.
+ 
+Why  It  Is  Important  
+●  Faster  issuance  =  higher  conversion  rates  ●  Eliminates  drop-offs  during  onboarding  ●  Reduces  dependency  on  manual  underwriting  teams  
+Workflow  Logic  
+Turns  a  lead  into  a  policyholder  in  under  5  minutes  
+Core  Components  
+●  Patient  Identity  Validator  (kyc_val_01)  ●  Clinical  Risk  Modeler  (risk_model)  
+Decision  Logic  
+If  risk_score  <  30,  auto-generate  and  send  policy  
+ 
+3.  KYC  &  Patient  Onboarding  (kyc_onboarding_v1)  
+Why  This  Exists  
+Every  system  needs  a  clean,  verified  entry  point  for  users .  This  workflow  ensures  that  bad  or  
+duplicate
+ 
+identities
+ 
+don’t
+ 
+enter
+ 
+the
+ 
+system
+.
+ 
+Why  It  Is  Important  
+●  Prevents  fraud  at  the  entry  layer  ●  Ensures  regulatory  compliance  ●  Enables  downstream  workflows  to  trust  the  data  
+Workflow  Logic  
+Lightweight  onboarding  for  hospitals  and  minor  products  
+Core  Components  
+●  API  call  to  national  insurance  database  
+
+--- PAGE 4 ---
+Output  Actions  
+Creates  profile  +  sends  digital  insurance  card  
+ 
+4.  Medical  Underwriting  (medical_uw_v1)  
+Why  This  Exists  
+Not  all  customers  are  equal  risk.  This  workflow  exists  to  price  high-risk  policies  accurately  
+without
+ 
+slowing
+ 
+down
+ 
+decision-making
+.
+ 
+Why  It  Is  Important  
+●  Prevents  underpricing  risky  customers  ●  Protects  long-term  profitability  ●  Reduces  dependency  on  expert  underwriters  
+Workflow  Logic  
+Used  for  high-value  policies  
+Core  Components  
+●  Medical  Underwriter  AI  (med_analyst_01)  
+Decision  Logic  
+Highlights  clinical  risks  
+Premium  Calculation  
+Applies  loadings  (e.g.,  smoker  →  +20%)  
+ 
+5.  Policy  Servicing  (policy_servicing_v1)  
+Why  This  Exists  
+After  a  policy  is  issued,  customers  continuously  request  changes.  This  workflow  exists  to  
+handle
+ 
+these
+ 
+safely
+ 
+without
+ 
+breaking
+ 
+system
+ 
+integrity
+.
+ 
+
+--- PAGE 5 ---
+Why  It  Is  Important  
+●  Prevents  invalid  or  unauthorized  changes  ●  Maintains  data  consistency  across  systems  ●  Reduces  customer  support  overhead  
+Workflow  Logic  
+Handles  post-sale  lifecycle  
+Core  Components  
+Validation  rules  (policy_active,  owner_verified)  
+Execution  
+Writes  updates  back  to  core  system  
+ 
+6.  Policy  Renewals  (policy_renewals_v1)  
+Why  This  Exists  
+Retention  is  more  profitable  than  acquisition.  This  workflow  exists  to  ensure  policies  don’t  
+lapse
+ 
+and
+ 
+pricing
+ 
+stays
+ 
+aligned
+ 
+with
+ 
+risk
+.
+ 
+Why  It  Is  Important  
+●  Prevents  revenue  leakage  from  churn  ●  Adjusts  pricing  based  on  real  usage  ●  Keeps  portfolio  profitable  
+Workflow  Logic  
+Scheduled  renewal  system  
+Core  Components  
+●  Renewal  Risk  Analyst  (usage_analyst)  
+Decision  Logic  
+Suggests  premium  adjustment  
+
+--- PAGE 6 ---
+Output  
+Automated  renewal  flow  
+ 
+7.  Compliance  Audit  (compliance_audit_v1)  
+Why  This  Exists  
+Insurance  operates  in  a  heavily  regulated  environment.  This  workflow  exists  to  continuously  
+monitor
+ 
+and
+ 
+enforce
+ 
+compliance
+ 
+automatically
+.
+ 
+Why  It  Is  Important  
+●  Prevents  legal  penalties  ●  Ensures  adherence  to  regulations  (e.g.,  HIPAA)  ●  Builds  trust  with  customers  and  regulators  
+Workflow  Logic  
+Acts  as  internal  monitoring  system  
+Core  Components  
+●  Logs  +  compliance  bot  
+Detection  
+Flags  violations  
+Human-in-the-loop  
+Requires  compliance  officer  approval  
+ 
+8.  Omnichannel  Intake  &  Routing  
+(omnichannel_routing_v1)
+ 
+Why  This  Exists  
+
+--- PAGE 7 ---
+All  workflows  need  a  single  intelligent  entry  point .  This  workflow  exists  to  understand  
+incoming
+ 
+requests
+ 
+and
+ 
+route
+ 
+them
+ 
+correctly
+.
+ 
+Why  It  Is  Important  
+●  Eliminates  manual  triaging  ●  Ensures  faster  response  times  ●  Enables  scalability  across  channels  
+Workflow  Logic  
+Entry  point  of  Insurance  AI  OS  
+Core  Components  
+●  Aura  Intake  AI  (router_agent)  
+Decision  Logic  
+Classifies  intent  and  routes  workflow  
+ 
+9.  Hospital  Intake  &  Exchange  (hospital_intake_v1)  
+Why  This  Exists  
+Incomplete  data  is  one  of  the  biggest  blockers  in  healthcare  workflows.  This  exists  to  actively  
+resolve
+ 
+missing
+ 
+information
+ 
+instead
+ 
+of
+ 
+stalling
+ 
+processes
+.
+ 
+Why  It  Is  Important  
+●  Prevents  workflow  deadlocks  ●  Reduces  manual  follow-ups  ●  Ensures  continuity  in  processing  
+Workflow  Logic  
+Handles  missing  admission  data  
+Core  Components  
+●  Hospital  Exchange  Coordinator  (hospital_coord_01)  
+
+--- PAGE 8 ---
+Bidirectional  Communication  
+Loops  data  back  into  workflow  
+ 
+10.  Sales  Application  Intake  (sales_intake_v1)  
+Why  This  Exists  
+Sales  pipelines  need  speed  and  instant  feedback.  This  workflow  exists  to  convert  applications  
+into
+ 
+actionable
+ 
+outputs
+ 
+immediately
+.
+ 
+Why  It  Is  Important  
+●  Reduces  lead  drop-off  ●  Improves  customer  experience  ●  Connects  sales  and  backend  systems  instantly  
+Workflow  Logic  
+Lead-to-code  engine  
+Core  Components  
+●  Sales  Intake  Specialist  (sales_intake_01)  
+Integration  
+Calls  external  API  
+Output  
+Generates  and  delivers  code  instantly  
+   
+ 

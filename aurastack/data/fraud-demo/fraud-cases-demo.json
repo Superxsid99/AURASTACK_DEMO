@@ -1,0 +1,129 @@
+[
+  {
+    "caseCode": "FRD-INS-001",
+    "sector": "insurance",
+    "product": "Health Claims",
+    "title": "Duplicate oncology claim against same invoice",
+    "expectedLabel": "fraud",
+    "expectedFraudType": "Duplicate Claim Submission",
+    "signals": {
+      "duplicateClaimCount": 2,
+      "sameInvoiceHashSeen": true,
+      "ocrInconsistencyScore": 0.11
+    }
+  },
+  {
+    "caseCode": "FRD-INS-002",
+    "sector": "insurance",
+    "product": "Health Claims",
+    "title": "Appendectomy reimbursement with complete proof",
+    "expectedLabel": "genuine",
+    "signals": {
+      "duplicateClaimCount": 0,
+      "sameInvoiceHashSeen": false,
+      "waitingPeriodBreach": false
+    }
+  },
+  {
+    "caseCode": "FRD-INS-003",
+    "sector": "insurance",
+    "product": "Motor Claims",
+    "title": "Repair estimate inflated beyond impact profile",
+    "expectedLabel": "fraud",
+    "expectedFraudType": "Provider Upcoding / Unbundling",
+    "signals": {
+      "procedureDiagnosisMismatch": true,
+      "providerAnomalyScore": 0.91,
+      "billingInflationPercent": 64
+    }
+  },
+  {
+    "caseCode": "FRD-INS-004",
+    "sector": "insurance",
+    "product": "Health Claims",
+    "title": "Critical illness claim inside waiting period",
+    "expectedLabel": "fraud",
+    "expectedFraudType": "Coverage Eligibility Breach",
+    "signals": {
+      "waitingPeriodBreach": true,
+      "excludedConditionFlag": true
+    }
+  },
+  {
+    "caseCode": "FRD-INS-005",
+    "sector": "insurance",
+    "product": "Health Claims",
+    "title": "Pathology report likely tampered",
+    "expectedLabel": "fraud",
+    "expectedFraudType": "Document Forgery / Tampering",
+    "signals": {
+      "metadataTamperFlag": true,
+      "signatureMismatchFlag": true,
+      "ocrInconsistencyScore": 0.87
+    }
+  },
+  {
+    "caseCode": "FRD-BNK-001",
+    "sector": "banking",
+    "product": "Retail Banking",
+    "title": "High-value transfer post password reset",
+    "expectedLabel": "fraud",
+    "expectedFraudType": "Account Takeover (ATO)",
+    "signals": {
+      "newDeviceFlag": true,
+      "geoVelocityKm": 1820,
+      "recentPasswordReset": true,
+      "beneficiaryAddedWithin24h": true
+    }
+  },
+  {
+    "caseCode": "FRD-BNK-002",
+    "sector": "banking",
+    "product": "Cards",
+    "title": "Known merchant CNP pattern",
+    "expectedLabel": "genuine",
+    "signals": {
+      "newDeviceFlag": false,
+      "counterpartyEntropy": 0
+    }
+  },
+  {
+    "caseCode": "FRD-BNK-003",
+    "sector": "banking",
+    "product": "Payments",
+    "title": "Mule account layering behaviour",
+    "expectedLabel": "fraud",
+    "expectedFraudType": "Mule Account / Layering",
+    "signals": {
+      "cashInOutVelocity": 0.94,
+      "roundTripTransferFlag": true,
+      "counterpartyEntropy": 0.89
+    }
+  },
+  {
+    "caseCode": "FRD-BNK-004",
+    "sector": "banking",
+    "product": "Loan Origination",
+    "title": "Income fabrication in personal loan file",
+    "expectedLabel": "fraud",
+    "expectedFraudType": "Loan Application Fabrication",
+    "signals": {
+      "incomeMismatchPercent": 57,
+      "statementAnomalyScore": 0.82,
+      "employerVerificationFailed": true
+    }
+  },
+  {
+    "caseCode": "FRD-BNK-005",
+    "sector": "banking",
+    "product": "Retail Onboarding",
+    "title": "Synthetic identity onboarding",
+    "expectedLabel": "fraud",
+    "expectedFraudType": "Synthetic Identity",
+    "signals": {
+      "kycMismatchCount": 3,
+      "bureauThinFileFlag": true,
+      "deviceReuseAcrossIdentities": true
+    }
+  }
+]

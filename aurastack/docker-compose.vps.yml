@@ -1,0 +1,118 @@
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-smart_case_buddy}
+      POSTGRES_USER: ${POSTGRES_USER:-smart}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-smart} -d ${POSTGRES_DB:-smart_case_buddy}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+
+  agents:
+    build:
+      context: .
+      dockerfile: apps/agents/Dockerfile
+    restart: unless-stopped
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    restart: unless-stopped
+    command: >
+      sh -c "npx prisma generate --schema apps/api/prisma/schema.prisma &&
+      npx prisma migrate deploy --schema apps/api/prisma/schema.prisma &&
+      node apps/api/dist/server.js"
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      API_PORT: 8000
+      API_HOST: 0.0.0.0
+      WEB_ORIGIN: ${WEB_ORIGIN}
+      AGENTS_SERVICE_URL: ${AGENTS_SERVICE_URL:-http://agents:8001}
+      INTERNAL_WORKER_TOKEN: ${INTERNAL_WORKER_TOKEN}
+      JWT_SECRET: ${JWT_SECRET}
+      AUTH_REQUIRED: ${AUTH_REQUIRED:-true}
+      INTAKE_QUEUE_ENABLED: ${INTAKE_QUEUE_ENABLED:-true}
+      WORKFLOW_QUEUE_ENABLED: ${WORKFLOW_QUEUE_ENABLED:-true}
+      ACCESS_TOKEN_TTL: ${ACCESS_TOKEN_TTL:-15m}
+      REFRESH_TOKEN_TTL_DAYS: ${REFRESH_TOKEN_TTL_DAYS:-30}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      agents:
+        condition: service_started
+
+  worker:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    restart: unless-stopped
+    command: ["node", "apps/api/dist/worker.js"]
+    environment:
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      API_INTERNAL_URL: ${API_INTERNAL_URL:-http://api:8000}
+      INTERNAL_WORKER_TOKEN: ${INTERNAL_WORKER_TOKEN}
+    depends_on:
+      redis:
+        condition: service_started
+      api:
+        condition: service_started
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-/api}
+        VITE_SOCKET_URL: ${VITE_SOCKET_URL:-}
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_started
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/vps/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - letsencrypt:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
+    depends_on:
+      web:
+        condition: service_started
+      api:
+        condition: service_started
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - letsencrypt:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
+
+volumes:
+  postgres_data:
+  redis_data:
+  letsencrypt:
+  certbot_www:
+

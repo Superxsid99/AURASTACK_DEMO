@@ -1,0 +1,339 @@
+
+
+--- PAGE 1 ---
+ 
+
+
+--- PAGE 2 ---
+Aurastack  AI  Agents  –  Structured  
+Directory
+ 
+ 
+Overview  
+The  Aurastack  platform  is  powered  by  a  fleet  of  11  specialized  AI  Agents,  each  designed  with  a  
+specific
+ 
+"Intelligence
+ 
+Profile"
+ 
+to
+ 
+handle
+ 
+different
+ 
+stages
+ 
+of
+ 
+the
+ 
+insurance
+ 
+lifecycle.
+ 
+Unlike
+ 
+generic
+ 
+LLMs,
+ 
+these
+ 
+agents
+ 
+are
+ 
+constrained
+ 
+by
+ 
+strict
+ 
+schemas
+ 
+and
+ 
+have
+ 
+access
+ 
+to
+ 
+specialized
+ 
+tools.
+ 
+ 
+1.  Medical  Data  Extractor  (doc_ext_01)  
+●  Type:  Document  Intelligence  ●  Role:  The  "Eyes"  of  the  claims  engine.  
+Capability  
+Uses  high-precision  OCR  and  NLP  to  parse  medical  invoices  and  clinical  reports.  
+Key  Outputs  
+●  Patient  Name  ●  Procedure  Codes  (CPT/ICD-10)  ●  Billing  Amounts  ●  Primary  Diagnosis  
+Constraint  
+Strict  HIPAA  compliance;  it  is  forbidden  from  extracting  data  that  isn't  explicitly  verified  in  the  
+source
+ 
+document.
+ 
+ 
+2.  Healthcare  Fraud  Sentinel  (fraud_det_01)  
+●  Type:  Fraud  &  Risk  Analysis  ●  Role:  The  "Security  Guard."  
+
+--- PAGE 3 ---
+Capability  
+Analyzes  claims  against  historical  patient  data  and  clinical  guidelines  to  find  "Upcoding"  (billing  
+for
+ 
+a
+ 
+more
+ 
+expensive
+ 
+service
+ 
+than
+ 
+performed)
+ 
+or
+ 
+"Unbundling."
+ 
+Tools  
+Accesses  the  clinical_guidelines_db.  
+Human  Hook  
+Automatically  triggers  a  "Human  Override"  if  the  fraud  risk  score  exceeds  70/100.  
+ 
+3.  Patient  Identity  Validator  (kyc_val_01)  
+●  Type:  Compliance  ●  Role:  The  "Gatekeeper."  
+Capability  
+Verifies  the  authenticity  of  ID  documents  (Passports,  DLs)  and  cross-references  them  with  
+insurance
+ 
+card
+ 
+scans.
+ 
+Tools  
+Integrated  with  ocr_engine  and  insurance_eligibility_api.  
+Usage  
+Primary  agent  for  the  KYC  &  Onboarding  workflow.  
+ 
+4.  Clinical  Risk  Modeler  (risk_model)  
+●  Type:  Validation  &  Prediction  ●  Role:  The  "Medical  Expert."  
+Capability  
+
+--- PAGE 4 ---
+Predicts  the  probability  of  readmission  or  complications  based  on  patient  vitals  and  health  
+history.
+ 
+Tools  
+Uses  a  medical_knowledge_graph  to  provide  evidence-based  recommendations.  
+Constraint  
+All  recommendations  must  be  reviewed  by  a  licensed  physician  (Human-in-the-loop).  
+ 
+5.  Policy  Servicing  Specialist  (policy_servicer_01)  
+●  Type:  Compliance  /  Admin  ●  Role:  The  "Account  Manager."  
+Capability  
+Processes  mid-term  policy  changes  like  beneficiary  updates  or  address  corrections.  
+Logic  
+It  identifies  if  a  requested  change  is  "Material"  (meaning  it  impacts  risk)  and  decides  if  the  case  
+needs
+ 
+to
+ 
+be
+ 
+sent
+ 
+back
+ 
+to
+ 
+Underwriting.
+ 
+ 
+6.  Renewal  Risk  Analyst  (renewal_analyst_01)  
+●  Type:  Actuarial  /  Risk  ●  Role:  The  "Retention  Expert."  
+Capability  
+Evaluates  a  policy's  performance  over  the  last  year.  It  looks  at  claim  frequency  and  severity  to  
+suggest
+ 
+a
+ 
+premium
+ 
+adjustment
+ 
+(e.g.,
+ 
++5%
+ 
+or
+ 
+-2%).
+ 
+Tools  
+Uses  actuarial_models  and  claims_database.  
+ 
+
+--- PAGE 5 ---
+7.  Healthcare  Compliance  Auditor  
+(compliance_auditor_01)
+ 
+●  Type:  Compliance  /  Audit  ●  Role:  The  "Internal  Auditor."  
+Capability  
+Scans  system  execution  logs  to  ensure  no  HIPAA  violations  occurred.  It  checks  who  accessed  
+what
+ 
+data
+ 
+and
+ 
+if
+ 
+the
+ 
+"Least
+ 
+Privilege"
+ 
+principle
+ 
+was
+ 
+followed.
+ 
+Action  
+Can  trigger  an  immediate  system  lockout  if  a  critical  data  breach  is  detected.  
+ 
+8.  Aura  Intake  AI  (intake_orchestrator_01)  
+●  Type:  Workflow  Control  ●  Role:  The  "Dispatcher."  
+Capability  
+Monitors  the  Omnichannel  Inbox.  It  reads  raw  text  from  emails  or  chats,  classifies  the  intent  
+(Claim
+ 
+vs.
+ 
+Quote),
+ 
+and
+ 
+triggers
+ 
+the
+ 
+correct
+ 
+backend
+ 
+workflow
+ 
+automatically.
+ 
+Confidence  
+Escalates  to  a  human  support  agent  if  intent  confidence  is  below  80%.  
+ 
+9.  Hospital  Exchange  Coordinator  (hospital_coord_01)  
+●  Type:  Workflow  Control  /  Communication  ●  Role:  The  "Communicator."  
+Capability  
+Manages  bidirectional  talk  with  hospital  records  departments.  It  knows  how  to  draft  professional  
+requests
+ 
+for
+ 
+missing
+ 
+medical
+ 
+records
+ 
+and
+ 
+tracks
+ 
+the
+ 
+"Case
+ 
+ID"
+ 
+across
+ 
+all
+ 
+threads.
+ 
+
+--- PAGE 6 ---
+ 
+10.  Policy  Issuance  Engine  (policy_gen_01)  
+●  Type:  Workflow  Control  /  Document  Gen  ●  Role:  The  "Closer."  
+Capability  
+Takes  approved  underwriting  terms  and  generates  the  final  legal  contract  (PDF).  It  then  pings  
+the
+ 
+core_insurance_api
+ 
+to
+ 
+activate
+ 
+the
+ 
+policy.
+ 
+ 
+11.  Sales  Intake  Specialist  (sales_intake_01)  
+●  Type:  Document  Intelligence  /  Sales  ●  Role:  The  "Lead  Processor."  
+Capability  
+Specifically  tuned  for  sales  applications.  It  extracts  demographic  and  salary  data  and  integrates  
+with
+ 
+a
+ 
+REST
+ 
+service
+ 
+to
+ 
+generate
+ 
+unique
+ 
+sales
+ 
+tracking
+ 
+codes.
+ 
+ 
+The  "Agent  Anatomy"  
+Every  agent  in  Aurastack  follows  a  strict  architectural  pattern:  
+Input  Schema  
+Defines  exactly  what  data  the  agent  needs  to  start  (e.g.,  document_url).  
+System  Instructions  
+The  "Personality"  and  "Expertise"  of  the  agent.  
+Tools  
+The  external  APIs  or  databases  the  agent  can  "call."  
+Output  Schema  
+
+--- PAGE 7 ---
+The  structured  JSON  the  agent  must  produce  (e.g.,  risk_score:  number).  
+Confidence  Score  
+Every  agent  output  includes  a  confidence  level,  allowing  the  Workflow  Builder  to  route  
+low-confidence
+ 
+results
+ 
+to
+ 
+humans.
+ 
+ 
+ 

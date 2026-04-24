@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Insurance Claim Packet - Suspicious (Demo)</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 36px; color: #111; line-height: 1.4; }
+    h1, h2 { margin: 0 0 8px 0; }
+    .meta { margin: 0 0 16px 0; font-size: 14px; }
+    .box { border: 1px solid #ccc; padding: 12px; margin: 14px 0; border-radius: 6px; }
+    .table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 14px; }
+    .table th, .table td { border: 1px solid #bbb; padding: 6px; text-align: left; }
+    .small { font-size: 13px; color: #444; }
+    .warn { color: #9b1c1c; font-weight: 700; }
+    .page-break { page-break-after: always; margin-top: 24px; }
+  </style>
+</head>
+<body>
+  <h1>Medical Claim Packet (Demo)</h1>
+  <p class="meta"><strong>Case Type:</strong> Cashless Health Claim | <strong>Claim Ref:</strong> CLM-DEMO-9011</p>
+  <p class="meta"><strong>Patient:</strong> Seema Agarwal | <strong>Policy No:</strong> HLT-2024-88291 | <strong>Hospital:</strong> Apollo Hospitals, Mumbai</p>
+
+  <div class="box">
+    <h2>Discharge Summary Snapshot</h2>
+    <p><strong>Diagnosis:</strong> Metastatic Pancreatic Adenocarcinoma</p>
+    <p><strong>Admission:</strong> 10-Sep-2026 | <strong>Discharge:</strong> 16-Sep-2026</p>
+    <p><strong>Treatment Protocol:</strong> Gemcite + Abraxane (Cycle II/III)</p>
+    <p class="small">Attending Physician: Dr. S. Prasad</p>
+  </div>
+
+  <div class="box">
+    <h2>Hospital Invoice</h2>
+    <p><strong>Invoice No:</strong> APH-448892</p>
+    <p><strong>Total Claim Amount:</strong> INR 486,000</p>
+    <table class="table">
+      <thead>
+        <tr><th>Line Item</th><th>Qty</th><th>Unit Cost</th><th>Total</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Chemo Drug - Gemcite</td><td>6</td><td>18,500</td><td>111,000</td></tr>
+        <tr><td>Chemo Drug - Abraxane</td><td>6</td><td>23,000</td><td>138,000</td></tr>
+        <tr><td>ICU Bed Charges</td><td>4</td><td>14,500</td><td>58,000</td></tr>
+        <tr><td>Oncology Specialist Fee</td><td>5</td><td>9,400</td><td>47,000</td></tr>
+        <tr><td>Diagnostics & Labs</td><td>1</td><td>44,000</td><td>44,000</td></tr>
+        <tr><td>Procedure Pack</td><td>1</td><td>88,000</td><td>88,000</td></tr>
+      </tbody>
+    </table>
+    <p class="warn">Demo anomaly marker: Same invoice hash observed in prior settled claim CLM-998117.</p>
+  </div>
+
+  <div class="page-break"></div>
+
+  <div class="box">
+    <h2>Supporting Notes (Demo)</h2>
+    <p>1. Claim submitted via email with high-priority escalation tag.</p>
+    <p>2. Similar treatment window appears in historical claim set.</p>
+    <p>3. Billing pattern indicates potential duplicate submission risk.</p>
+    <p class="small">This document is synthetic demo data for fraud detection walkthroughs only.</p>
+  </div>
+</body>
+</html>
+

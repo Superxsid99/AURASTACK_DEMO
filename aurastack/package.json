@@ -1,0 +1,39 @@
+{
+  "name": "smart-case-buddy",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/web",
+    "apps/api",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n web,api,worker,agents -c blue,green,yellow,magenta \"npm run dev --workspace @smart-case-buddy/web\" \"npm run dev --workspace @smart-case-buddy/api\" \"npm run dev:worker --workspace @smart-case-buddy/api\" \"python3 apps/agents/src/server.py\"",
+    "dev:web": "npm run dev --workspace @smart-case-buddy/web",
+    "dev:api": "npm run dev --workspace @smart-case-buddy/api",
+    "dev:worker": "npm run dev:worker --workspace @smart-case-buddy/api",
+    "dev:agents": "python3 apps/agents/src/server.py",
+    "docker:up": "docker compose up -d postgres redis",
+    "docker:stack": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:vps:up": "bash deploy/vps/scripts/deploy.sh",
+    "docker:vps:down": "bash deploy/vps/scripts/down.sh",
+    "docker:vps:logs": "bash deploy/vps/scripts/logs.sh",
+    "prod:preflight": "node deploy/scripts/prod-preflight.mjs",
+    "prod:go-live": "node deploy/scripts/prod-preflight.mjs --strict",
+    "vps:deploy": "bash deploy/vps/scripts/deploy.sh",
+    "vps:seed": "bash deploy/vps/scripts/seed.sh",
+    "vps:https": "bash deploy/vps/scripts/enable-https.sh",
+    "vps:https:renew": "bash deploy/vps/scripts/renew-https.sh",
+    "build": "npm run build --workspace @smart-case-buddy/shared-types && npm run build --workspace @smart-case-buddy/api && npm run build --workspace @smart-case-buddy/web",
+    "lint": "npm run lint --workspace @smart-case-buddy/web && npm run lint --workspace @smart-case-buddy/api",
+    "test": "npm run test --workspace @smart-case-buddy/api && npm run test --workspace @smart-case-buddy/web",
+    "test:e2e": "npm run test:e2e --workspace @smart-case-buddy/api",
+    "db:generate": "npm run prisma:generate --workspace @smart-case-buddy/api",
+    "db:migrate": "npm run prisma:migrate --workspace @smart-case-buddy/api",
+    "db:seed": "npm run db:seed --workspace @smart-case-buddy/api"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

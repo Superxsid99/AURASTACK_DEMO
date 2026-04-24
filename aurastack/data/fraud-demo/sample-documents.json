@@ -1,0 +1,113 @@
+{
+  "generated_at": "2026-04-17T00:00:00Z",
+  "description": "Demo evidence documents mapped to fraud demo cases for insurance and banking.",
+  "documents": [
+    {
+      "case_id": "ins-001",
+      "case_code": "FRD-INS-001",
+      "doc_name": "discharge_summary_34_pages.pdf",
+      "doc_type": "medical_discharge_summary",
+      "key_sections": [
+        "Admission/Discharge timeline",
+        "Diagnosis details",
+        "Oncology treatment protocol"
+      ],
+      "evidence_note": "Used with invoice hash check to flag duplicate claim submission."
+    },
+    {
+      "case_id": "ins-001",
+      "case_code": "FRD-INS-001",
+      "doc_name": "hospital_invoice_apollo_sep.pdf",
+      "doc_type": "hospital_invoice",
+      "key_sections": [
+        "Invoice number and line items",
+        "Procedure amount breakdown"
+      ],
+      "evidence_note": "Invoice APH-448892 appears in prior settled claim CLM-998117."
+    },
+    {
+      "case_id": "ins-003",
+      "case_code": "FRD-INS-003",
+      "doc_name": "garage_estimate_rev3.pdf",
+      "doc_type": "repair_estimate",
+      "key_sections": [
+        "Damage zone mapping",
+        "Parts replacement list",
+        "Labor cost split"
+      ],
+      "evidence_note": "Front suspension and ECU replacement not aligned with rear-impact incident."
+    },
+    {
+      "case_id": "ins-004",
+      "case_code": "FRD-INS-004",
+      "doc_name": "policy_schedule.pdf",
+      "doc_type": "policy_contract",
+      "key_sections": [
+        "Inception date",
+        "Critical illness waiting period",
+        "Exclusions"
+      ],
+      "evidence_note": "Claim date falls inside waiting period for declared illness."
+    },
+    {
+      "case_id": "ins-005",
+      "case_code": "FRD-INS-005",
+      "doc_name": "lab_report_scan.jpg",
+      "doc_type": "lab_report_scan",
+      "key_sections": [
+        "Report metadata",
+        "Signature area",
+        "Parameter values"
+      ],
+      "evidence_note": "OCR inconsistency and metadata tamper flags indicate potential forgery."
+    },
+    {
+      "case_id": "bnk-001",
+      "case_code": "FRD-BNK-001",
+      "doc_name": "transaction_alerts.csv",
+      "doc_type": "transaction_feed",
+      "key_sections": [
+        "Device fingerprint",
+        "Geo velocity",
+        "Beneficiary creation timestamp"
+      ],
+      "evidence_note": "New device + password reset + high velocity transfer pattern."
+    },
+    {
+      "case_id": "bnk-002",
+      "case_code": "FRD-BNK-002",
+      "doc_name": "transfer_graph.json",
+      "doc_type": "payment_graph",
+      "key_sections": [
+        "Counterparty clusters",
+        "Round-trip loops",
+        "In-out velocity"
+      ],
+      "evidence_note": "Circular layering and mule-network behavior detected."
+    },
+    {
+      "case_id": "bnk-004",
+      "case_code": "FRD-BNK-004",
+      "doc_name": "loan_application_pack.pdf",
+      "doc_type": "loan_pack",
+      "key_sections": [
+        "Salary slips",
+        "Bank statement trend",
+        "Employer confirmation"
+      ],
+      "evidence_note": "Declared income mismatches statement flows; employer verification failed."
+    },
+    {
+      "case_id": "bnk-005",
+      "case_code": "FRD-BNK-005",
+      "doc_name": "onboarding_packet.pdf",
+      "doc_type": "kyc_packet",
+      "key_sections": [
+        "PAN details",
+        "Address consistency",
+        "Bureau profile"
+      ],
+      "evidence_note": "KYC fields match bureau and historical profile; treated as genuine."
+    }
+  ]
+}

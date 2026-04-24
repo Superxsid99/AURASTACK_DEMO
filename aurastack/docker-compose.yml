@@ -1,0 +1,122 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: smart-case-buddy-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: smart_case_buddy
+      POSTGRES_USER: smart
+      POSTGRES_PASSWORD: smart
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U smart -d smart_case_buddy"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7
+    container_name: smart-case-buddy-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  agents:
+    image: python:3.11-slim
+    container_name: smart-case-buddy-agents
+    restart: unless-stopped
+    working_dir: /workspace/apps/agents
+    command: >
+      sh -c "pip install --no-cache-dir -r requirements.txt &&
+      uvicorn server:app --app-dir src --host 0.0.0.0 --port 8001"
+    volumes:
+      - .:/workspace
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+      OPENAI_VISION_MODEL: ${OPENAI_VISION_MODEL:-gpt-4o}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_FROM: ${SMTP_FROM:-}
+      IMAP_HOST: ${IMAP_HOST:-}
+      IMAP_PORT: ${IMAP_PORT:-993}
+      IMAP_USER: ${IMAP_USER:-}
+      IMAP_PASS: ${IMAP_PASS:-}
+      IMAP_MAILBOX: ${IMAP_MAILBOX:-INBOX}
+      IMAP_POLL_INTERVAL: ${IMAP_POLL_INTERVAL:-60}
+      API_INBOUND_URL: ${API_INBOUND_URL:-http://api:8000/email/inbound}
+      API_INBOUND_TOKEN: ${API_INBOUND_TOKEN:-dev-worker-token}
+    ports:
+      - "8001:8001"
+
+  api:
+    image: node:20
+    container_name: smart-case-buddy-api
+    restart: unless-stopped
+    working_dir: /workspace
+    command: >
+      sh -c "npm install &&
+      npm run db:generate &&
+      npm run db:migrate &&
+      npm run db:seed &&
+      npm run dev:api"
+    environment:
+      DATABASE_URL: postgresql://smart:smart@postgres:5432/smart_case_buddy?schema=public
+      REDIS_URL: redis://redis:6379
+      API_PORT: 8000
+      API_HOST: 0.0.0.0
+      WEB_ORIGIN: http://localhost:8080
+      AGENTS_SERVICE_URL: http://agents:8001
+      INTERNAL_WORKER_TOKEN: dev-worker-token
+      INTAKE_QUEUE_ENABLED: "true"
+      WORKFLOW_QUEUE_ENABLED: "true"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      agents:
+        condition: service_started
+    volumes:
+      - .:/workspace
+    ports:
+      - "8000:8000"
+
+  worker:
+    image: node:20
+    container_name: smart-case-buddy-worker
+    restart: unless-stopped
+    working_dir: /workspace
+    command: >
+      sh -c "npm install &&
+      npm run dev:worker"
+    environment:
+      REDIS_URL: redis://redis:6379
+      API_INTERNAL_URL: http://api:8000
+      INTERNAL_WORKER_TOKEN: dev-worker-token
+    depends_on:
+      - redis
+      - api
+    volumes:
+      - .:/workspace
+
+  web:
+    image: node:20
+    container_name: smart-case-buddy-web
+    restart: unless-stopped
+    working_dir: /workspace
+    command: >
+      sh -c "npm install &&
+      npm run dev --workspace @smart-case-buddy/web -- --host 0.0.0.0 --port 8080"
+    depends_on:
+      - api
+    volumes:
+      - .:/workspace
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:

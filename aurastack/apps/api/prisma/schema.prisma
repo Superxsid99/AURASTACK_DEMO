@@ -1,0 +1,352 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  name          String
+  email         String?        @unique
+  role          String         @default("reviewer")
+  passwordHash  String?
+  reviewTasks   ReviewTask[]
+  refreshTokens RefreshToken[]
+  auditLogs     AuditLog[]
+}
+
+model CaseRecord {
+  id                  String    @id
+  caseType            String
+  workflowStage       String
+  assignedUserName    String?
+  aiStatus            String
+  priority            String
+  memberName          String
+  status              String
+  documentsTotal      Int       @default(0)
+  documentsComplete   Int       @default(0)
+  customerEmail       String?
+  claimClassification String?
+  policyNumber        String?
+  claimAmount         Float?
+  incidentDate        DateTime?
+  slaDeadline         DateTime?
+  slaBreached         Boolean   @default(false)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  documents          Document[]
+  intakeJobs         IntakeJob[]
+  reviewTasks        ReviewTask[]
+  events             Event[]
+  agentRuns          AgentRun[]
+  workflowExecutions WorkflowExecution[]
+  emailThreads       EmailThread[]
+  slaPolicy          SLAPolicy?
+}
+
+model Document {
+  id        String     @id @default(cuid())
+  caseId    String
+  name      String
+  type      String
+  status    String
+  pages     Int?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  case      CaseRecord @relation(fields: [caseId], references: [id], onDelete: Cascade)
+}
+
+model IntakeJob {
+  id           String     @id @default(cuid())
+  caseId       String
+  status       String
+  currentStep  String?
+  errorMessage String?
+  flowConfig   Json?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  case         CaseRecord @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  agentRuns    AgentRun[]
+}
+
+model ReviewTask {
+  id         String     @id @default(cuid())
+  caseId     String
+  reason     String
+  status     String
+  assignedTo String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  case       CaseRecord @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  assignee   User?      @relation(fields: [assignedTo], references: [id])
+}
+
+model AgentDefinition {
+  id           String     @id @default(cuid())
+  name         String
+  agentType    String
+  status       String
+  role         String?
+  description  String?
+  instructions String?
+  provider     String?
+  model        String?
+  department   String?
+  policyRules  Json?
+  tools        Json?
+  integrations Json?
+  flowConfig   Json
+  metadata     Json?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  agentRuns    AgentRun[]
+}
+
+model AgentRun {
+  id          String           @id @default(cuid())
+  caseId      String
+  intakeJobId String?
+  agentId     String?
+  agentName   String?
+  step        String
+  stepKind    String?
+  status      String
+  output      String
+  outputJson  Json?
+  inputJson   Json?
+  durationMs  Int?
+  error       String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  case        CaseRecord       @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  intakeJob   IntakeJob?       @relation(fields: [intakeJobId], references: [id], onDelete: SetNull)
+  agent       AgentDefinition? @relation(fields: [agentId], references: [id], onDelete: SetNull)
+
+  @@index([agentId, createdAt])
+  @@index([caseId, createdAt])
+}
+
+model Event {
+  id        String     @id @default(cuid())
+  caseId    String
+  type      String
+  payload   Json
+  createdAt DateTime   @default(now())
+  case      CaseRecord @relation(fields: [caseId], references: [id], onDelete: Cascade)
+}
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique
+  userId    String
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, revokedAt])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  action     String
+  resource   String
+  resourceId String?
+  status     String
+  ip         String?
+  metadata   Json?
+  createdAt  DateTime @default(now())
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([action, createdAt])
+}
+
+model Workflow {
+  id          String  @id @default(cuid())
+  key         String? @unique
+  name        String
+  description String?
+  status      String  @default("active")
+  version     Int     @default(1)
+
+  steps      WorkflowStep[]
+  executions WorkflowExecution[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, updatedAt])
+}
+
+model WorkflowStep {
+  id         String @id @default(cuid())
+  workflowId String
+
+  name      String
+  stepType  String
+  stepOrder Int
+
+  config Json?
+
+  nextStepId String?
+
+  workflow       Workflow                @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  executionSteps WorkflowExecutionStep[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([workflowId, stepOrder])
+  @@index([workflowId, stepType])
+}
+
+model WorkflowExecution {
+  id String @id @default(cuid())
+
+  workflowId String
+  caseId     String
+
+  source      String?
+  status      String @default("queued")
+  currentStep String?
+  input       Json?
+  context     Json?
+  output      Json?
+  errorMessage String?
+
+  startedAt  DateTime  @default(now())
+  finishedAt DateTime?
+
+  workflow Workflow   @relation(fields: [workflowId], references: [id])
+  case     CaseRecord @relation(fields: [caseId], references: [id])
+
+  steps WorkflowExecutionStep[]
+
+  @@index([workflowId, status, startedAt])
+  @@index([caseId, startedAt])
+}
+
+model WorkflowExecutionStep {
+  id String @id @default(cuid())
+
+  executionId String
+  stepId      String
+
+  stepName   String
+  stepType   String
+  status     String
+  input      Json?
+  output     Json?
+  decision   String?
+  errorMessage String?
+  durationMs Int?
+
+  startedAt  DateTime  @default(now())
+  finishedAt DateTime?
+
+  execution WorkflowExecution @relation(fields: [executionId], references: [id])
+  step      WorkflowStep      @relation(fields: [stepId], references: [id], onDelete: Cascade)
+
+  @@index([executionId])
+  @@index([stepId, startedAt])
+}
+
+model EmailThread {
+  id          String      @id @default(cuid())
+  caseId      String?
+  messageId   String?     @unique
+  fromAddress String
+  toAddress   String
+  subject     String
+  body        String
+  attachments Json?
+  direction   String      @default("inbound")
+  status      String      @default("new")
+  rawHeaders  Json?
+  processedAt DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  case        CaseRecord? @relation(fields: [caseId], references: [id], onDelete: SetNull)
+
+  @@index([caseId, createdAt])
+}
+
+model ClaimType {
+  id                   String   @id @default(cuid())
+  key                  String   @unique
+  name                 String
+  description          String?
+  workflowKey          String?
+  requiredDocuments    Json?
+  slaHours             Int      @default(48)
+  autoApproveThreshold Float    @default(0.92)
+  minConfidence        Float    @default(0.80)
+  validationRules      Json?
+  isActive             Boolean  @default(true)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model PolicyRegistry {
+  id             String   @id @default(cuid())
+  policyNumber   String   @unique
+  memberId       String?
+  memberName     String
+  memberEmail    String?
+  policyType     String
+  coverageTypes  Json
+  sumInsured     Float
+  currency       String   @default("INR")
+  payerName      String?
+  status         String   @default("active")
+  effectiveDate  DateTime?
+  expiryDate     DateTime?
+  metadata       Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([policyType, status])
+  @@index([memberEmail])
+}
+
+model SLAPolicy {
+  id          String    @id @default(cuid())
+  caseId      String    @unique
+  priority    String
+  deadlineAt  DateTime
+  escalatedAt DateTime?
+  metAt       DateTime?
+  status      String    @default("active")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  case        CaseRecord @relation(fields: [caseId], references: [id], onDelete: Cascade)
+}
+
+model InboxEmail {
+  id               String   @id @default(cuid())
+  label            String
+  email            String   @unique
+  protocol         String   @default("imap")
+  host             String
+  port             Int      @default(993)
+  username         String
+  password         String
+  mailbox          String   @default("INBOX")
+  pollInterval     Int      @default(60)
+  isActive         Boolean  @default(true)
+  domain           String?
+  workflowKey      String?
+  claimTypeKey     String?
+  autoReplyEnabled Boolean  @default(true)
+  lastPolled       DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}

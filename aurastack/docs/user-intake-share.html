@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AuraStack User Intake Portal</title>
+  <style>
+    :root {
+      --bg: #061019;
+      --bg-soft: #0c1722;
+      --card: #101e2b;
+      --line: #1f3345;
+      --text: #d5e5f6;
+      --muted: #8aa6c3;
+      --brand: #4dd4c6;
+      --brand-strong: #21b8a8;
+      --warn: #ffb84d;
+      --danger: #ff6f6f;
+      --ok: #49d49b;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(77, 212, 198, 0.15), transparent 30%),
+        radial-gradient(circle at 90% 0%, rgba(40, 110, 255, 0.10), transparent 25%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 28px auto;
+      padding: 0 16px 28px;
+    }
+
+    .hero {
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, #122434, #0d1c2a);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 18px;
+    }
+
+    .title {
+      font-size: 30px;
+      font-weight: 700;
+      margin: 0 0 8px;
+      color: #ecf8ff;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      background: var(--card);
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .card h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      color: #e9f5ff;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 700px) {
+      .row { grid-template-columns: 1fr; }
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #2a4056;
+      background: #091521;
+      color: var(--text);
+      border-radius: 10px;
+      padding: 11px 12px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(77, 212, 198, 0.15);
+    }
+
+    textarea {
+      min-height: 106px;
+      resize: vertical;
+    }
+
+    .help {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 14px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(180deg, var(--brand), var(--brand-strong));
+      color: #03241f;
+    }
+
+    .btn-secondary {
+      background: #172a3a;
+      color: #cce1f6;
+      border: 1px solid #284158;
+    }
+
+    .pill {
+      display: inline-block;
+      margin-right: 8px;
+      margin-bottom: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid var(--line);
+      background: #0c1a27;
+      color: #b9d2ea;
+    }
+
+    .ok { color: var(--ok); }
+    .warn { color: var(--warn); }
+    .danger { color: var(--danger); }
+
+    .box {
+      background: #08131d;
+      border: 1px dashed #2d465e;
+      border-radius: 10px;
+      padding: 10px;
+      min-height: 54px;
+      color: #aac3da;
+      font-size: 13px;
+    }
+
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 12px;
+      color: #d6ecff;
+    }
+
+    .status {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1 class="title">AuraStack User Intake Portal</h1>
+      <p class="subtitle">
+        Shareable demo page for claim and policy intake. Submissions can be routed to workflows,
+        tracked by case ID, and passed to AI orchestration.
+      </p>
+    </section>
+
+    <div class="grid">
+      <section class="card">
+        <h2>New Intake Request</h2>
+        <form id="intakeForm">
+          <div class="row">
+            <div>
+              <label for="requestType">Request Type</label>
+              <select id="requestType" required>
+                <option value="claim">File a Claim</option>
+                <option value="status_inquiry">Claim Status Inquiry</option>
+                <option value="policy_purchase">Sales Application</option>
+                <option value="document_upload">Document Upload</option>
+                <option value="general_query">General Query</option>
+              </select>
+            </div>
+            <div>
+              <label for="domainHint">Domain</label>
+              <select id="domainHint" required>
+                <option value="health">Insurance - Health</option>
+                <option value="motor">Insurance - Motor</option>
+                <option value="property">Insurance - Property & Casualty</option>
+                <option value="banking">Banking</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="name">Customer Name</label>
+              <input id="name" placeholder="Seema Agarwal" required />
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <input id="email" type="email" placeholder="seema@email.com" required />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="phone">Phone</label>
+              <input id="phone" placeholder="+91 98xxxxxx12" required />
+            </div>
+            <div>
+              <label for="policyNumber">Policy Number</label>
+              <input id="policyNumber" placeholder="POL-HDFC-99821" />
+            </div>
+          </div>
+
+          <div>
+            <label for="message">Request Details</label>
+            <textarea id="message" placeholder="Describe the claim or request..." required></textarea>
+          </div>
+
+          <div style="margin-top: 12px;">
+            <label for="files">Attachments</label>
+            <input id="files" type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.webp,.gif" />
+            <div class="help">Attach discharge summary, invoices, lab reports, ID proof, policy copy.</div>
+          </div>
+
+          <div class="actions">
+            <button class="btn-primary" type="submit">Generate Intake Payload</button>
+            <button class="btn-secondary" type="button" id="downloadJson">Download JSON</button>
+            <button class="btn-secondary" type="reset">Reset</button>
+          </div>
+        </form>
+
+        <p id="status" class="status">Ready for submission.</p>
+      </section>
+
+      <aside class="card">
+        <h2>Routing Preview</h2>
+        <div class="pill">Rules + LLM Classification</div>
+        <div class="pill">Confidence Gating</div>
+        <div class="pill">Escalation Safe Path</div>
+
+        <div style="margin-top: 8px;">
+          <label>Predicted Workflow</label>
+          <div id="wf" class="box">-</div>
+        </div>
+        <div style="margin-top: 10px;">
+          <label>Routing Reason</label>
+          <div id="reason" class="box">-</div>
+        </div>
+        <div style="margin-top: 10px;">
+          <label>Confidence</label>
+          <div id="confidence" class="box">-</div>
+        </div>
+      </aside>
+    </div>
+
+    <section class="card" style="margin-top: 16px;">
+      <h2>Generated Payload (Share / API Submit)</h2>
+      <div class="box" style="min-height: 190px;">
+        <pre id="payload">{}</pre>
+      </div>
+      <p class="help">
+        API target suggestion: <code>POST /portal/intake</code> with this JSON body.
+      </p>
+    </section>
+  </div>
+
+  <script>
+    const form = document.getElementById("intakeForm");
+    const payloadEl = document.getElementById("payload");
+    const wfEl = document.getElementById("wf");
+    const reasonEl = document.getElementById("reason");
+    const confidenceEl = document.getElementById("confidence");
+    const statusEl = document.getElementById("status");
+    let latestPayload = {};
+
+    function predictWorkflow(requestType, domainHint, message) {
+      const text = (message || "").toLowerCase();
+      if (domainHint === "health" && (requestType === "claim" || text.includes("discharge") || text.includes("hospital"))) {
+        return {
+          key: "hospital_intake_v1 -> claims_mgmt_v1 -> compliance_audit_v1",
+          reason: "Health claim intent with medical/hospital context detected.",
+          confidence: 0.91
+        };
+      }
+      if (domainHint === "health" && requestType === "policy_purchase") {
+        return {
+          key: "health_policy_issuance_v1",
+          reason: "Health sales application flow selected.",
+          confidence: 0.87
+        };
+      }
+      if (domainHint === "motor" && requestType === "claim") {
+        return {
+          key: "motor_claims_v1",
+          reason: "Motor claim intent and domain mapping matched.",
+          confidence: 0.89
+        };
+      }
+      if (requestType === "status_inquiry") {
+        return {
+          key: "omnichannel_intake_v1 -> customer_servicing_v1",
+          reason: "Status inquiry routed to customer servicing.",
+          confidence: 0.82
+        };
+      }
+      return {
+        key: "omnichannel_routing_v1 -> manual_triage",
+        reason: "Low-confidence route. Manual triage fallback for safety.",
+        confidence: 0.58
+      };
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const filesInput = document.getElementById("files");
+      const files = Array.from(filesInput.files || []).map((f) => ({
+        name: f.name,
+        type: f.type || "application/octet-stream",
+        sizeBytes: f.size
+      }));
+
+      const requestType = document.getElementById("requestType").value;
+      const domainHint = document.getElementById("domainHint").value;
+      const message = document.getElementById("message").value.trim();
+
+      const prediction = predictWorkflow(requestType, domainHint, message);
+
+      latestPayload = {
+        requestType,
+        domainHint,
+        customer: {
+          name: document.getElementById("name").value.trim(),
+          email: document.getElementById("email").value.trim(),
+          phone: document.getElementById("phone").value.trim()
+        },
+        policyNumber: document.getElementById("policyNumber").value.trim() || null,
+        message,
+        attachments: files,
+        sourceChannel: "portal",
+        receivedAt: new Date().toISOString(),
+        selectedWorkflowKey: prediction.key,
+        selectedWorkflowReason: prediction.reason,
+        routingConfidence: prediction.confidence
+      };
+
+      payloadEl.textContent = JSON.stringify(latestPayload, null, 2);
+      wfEl.textContent = prediction.key;
+      reasonEl.textContent = prediction.reason;
+      confidenceEl.innerHTML = (prediction.confidence >= 0.8)
+        ? `<span class="ok">${Math.round(prediction.confidence * 100)}% (Auto Route)</span>`
+        : (prediction.confidence >= 0.55)
+        ? `<span class="warn">${Math.round(prediction.confidence * 100)}% (Review Recommended)</span>`
+        : `<span class="danger">${Math.round(prediction.confidence * 100)}% (Manual Triage)</span>`;
+
+      statusEl.innerHTML = `<span class="ok">Payload generated.</span> You can now share this JSON or post to API.`;
+    });
+
+    document.getElementById("downloadJson").addEventListener("click", function () {
+      if (!latestPayload || !latestPayload.requestType) {
+        statusEl.innerHTML = `<span class="warn">No payload yet.</span> Fill the form and click Generate first.`;
+        return;
+      }
+      const blob = new Blob([JSON.stringify(latestPayload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "aurastack_intake_payload.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
+

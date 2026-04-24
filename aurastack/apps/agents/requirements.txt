@@ -1,0 +1,30 @@
+fastapi>=0.124.1,<1.0.0
+uvicorn>=0.37.0,<1.0.0
+
+# AI frameworks
+langgraph>=0.2.0,<1.0.0
+langchain>=0.3.0,<1.0.0
+langchain-openai>=0.2.0,<1.0.0
+
+# Models
+openai>=1.69.0,<2.0.0
+
+# Optional future models
+google-generativeai>=0.7.0
+
+# Document processing
+pypdf>=5.0.0
+pytesseract>=0.3.10
+Pillow>=10.0.0
+
+# Data tools
+pandas>=2.2.0
+
+# HTTP
+httpx>=0.28.0
+
+# Validation
+pydantic>=2.10.0
+
+# Logging
+loguru>=0.7.2

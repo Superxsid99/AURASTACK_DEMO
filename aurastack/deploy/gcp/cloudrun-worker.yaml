@@ -1,0 +1,22 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: smart-case-buddy-worker
+spec:
+  template:
+    spec:
+      containers:
+        - image: REGION-docker.pkg.dev/PROJECT_ID/smart-case-buddy/api:latest
+          command:
+            - node
+            - apps/api/dist/worker.js
+          env:
+            - name: REDIS_URL
+              value: "redis://REDIS_HOST:6379"
+            - name: API_INTERNAL_URL
+              value: "https://smart-case-buddy-api-URL"
+            - name: INTERNAL_WORKER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: internal-worker-token
+                  key: latest
